@@ -7,7 +7,12 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "postinstall": "prisma generate"
+    "prisma:generate": "prisma generate",
+    "prisma:deploy": "prisma migrate deploy",
+    "prisma:seed": "prisma db seed",
+    "pm2:start": "PORT=3002 pm2 start bun --name \"prostore\" -- start",
+    "pm2:stop": "pm2 stop all && pm2 delete all",
+    "production": "bun i && bun run prisma:generate && bun run build && bun run prisma:deploy && bun run pm2:stop && bun run pm2:start"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
