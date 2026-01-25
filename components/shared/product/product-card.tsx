@@ -1,13 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import type { getLatestProducts } from "@/lib/actions/product.actions";
+import type { ProductWithImages } from "@/lib/actions/product.actions";
 import ProductPrice from "./product-price";
 
 export default function ProductCard({
   product,
 }: {
-  product: Awaited<ReturnType<typeof getLatestProducts>>[number];
+  product: ProductWithImages;
 }) {
   return (
     <Card className="w-full max-w-sm">

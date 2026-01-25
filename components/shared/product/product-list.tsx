@@ -1,11 +1,11 @@
-import type { getLatestProducts } from "@/lib/actions/product.actions";
+import type { ProductWithImages } from "@/lib/actions/product.actions";
 import ProductCard from "./product-card";
 
 export default function ProductList({
   data,
   title,
 }: {
-  data: Awaited<ReturnType<typeof getLatestProducts>>;
+  data: ProductWithImages[];
   title?: string;
 }) {
   return (
