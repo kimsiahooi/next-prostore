@@ -1,13 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import type { ProductWithImages } from "@/lib/actions/product.actions";
+import type { getLatestProducts } from "@/lib/actions/product.actions";
 import ProductPrice from "./product-price";
 
 export default function ProductCard({
   product,
 }: {
-  product: ProductWithImages;
+  product: Awaited<ReturnType<typeof getLatestProducts>>[number];
 }) {
   return (
     <Card className="w-full max-w-sm">
@@ -28,9 +28,9 @@ export default function ProductCard({
           <h2 className="text-sm font-medium">{product.name}</h2>
         </Link>
         <div className="flex-between gap-4">
-          <p>{product.rating.toNumber()} Stars</p>
+          <p>{product.rating} Stars</p>
           {product.stock ? (
-            <ProductPrice value={product.price.toNumber()} />
+            <ProductPrice value={product.price} />
           ) : (
             <p className="text-destructive">Out Of Stock</p>
           )}
