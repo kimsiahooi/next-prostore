@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import type { sampleData } from "@/db/sample-data";
+import ProductPrice from "./product-price";
 
 export default function ProductCard({
   product,
@@ -29,7 +30,7 @@ export default function ProductCard({
         <div className="flex-between gap-4">
           <p>{product.rating} Stars</p>
           {product.stock ? (
-            <p className="font-bold">${product.price}</p>
+            <ProductPrice value={product.price} />
           ) : (
             <p className="text-destructive">Out Of Stock</p>
           )}
