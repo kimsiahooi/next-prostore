@@ -1,5 +1,8 @@
-import { Button } from "@/components/ui/button";
+import ProductList from "@/components/shared/product/product-list";
+import { sampleData } from "@/db/sample-data";
 
 export default function Homepage() {
-  return <Button>dd</Button>;
+  return (
+    <ProductList data={sampleData.products} title="Newest Arrivals" limit={4} />
+  );
 }
