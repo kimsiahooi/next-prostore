@@ -54,7 +54,6 @@ model User {
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   account       Account[]
-  accountId     String
   sessions      Session[]
 }
 

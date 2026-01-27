@@ -5,6 +5,10 @@ console.log("Database seeding...");
 
 async function main() {
   await prisma.product.deleteMany();
+  await prisma.account.deleteMany();
+  await prisma.session.deleteMany();
+  await prisma.verificationToken.deleteMany();
+  await prisma.user.deleteMany();
 
   for (const product of sampleData.products) {
     await prisma.product.create({
@@ -16,6 +20,8 @@ async function main() {
       },
     });
   }
+
+  await prisma.user.createMany({ data: sampleData.users });
 }
 
 main()
