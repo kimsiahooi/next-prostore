@@ -15,6 +15,7 @@
     "production": "bun i && bun run prisma:generate && bun run build && bun run prisma:deploy && bun run pm2:stop && bun run pm2:start"
   },
   "dependencies": {
+    "@auth/prisma-adapter": "^2.11.1",
     "@hookform/resolvers": "^5.2.2",
     "@prisma/adapter-mariadb": "^7.3.0",
     "@prisma/client": "^7.3.0",
@@ -54,6 +55,7 @@
     "input-otp": "^1.4.2",
     "lucide-react": "^0.563.0",
     "next": "16.1.4",
+    "next-auth": "^5.0.0-beta.30",
     "next-themes": "^0.4.6",
     "react": "19.2.3",
     "react-day-picker": "^9.13.0",
