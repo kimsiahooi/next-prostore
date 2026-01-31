@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 import { Button } from "@/components/ui/button";
@@ -25,9 +26,13 @@ export default function CredentialsSignInForm() {
     message: "",
   });
 
+  const searhParams = useSearchParams();
+  const callbackUrl = searhParams.get("callbackUrl") ?? "/";
+
   return (
     <form action={action}>
       <div className="space-y-6">
+        <input type="hidden" name="callbackUrl" value={callbackUrl} />
         <div>
           <Label htmlFor="email">Email</Label>
           <Input
