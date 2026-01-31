@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import CredentialsSignInForm from "@/components/pages/sign-in/credentials-signin-form";
 import {
   Card,
   CardContent,
@@ -33,7 +34,9 @@ export default function SignInPage() {
             Sign in to your account
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">{/* FORM */}</CardContent>
+        <CardContent className="space-y-4">
+          <CredentialsSignInForm />
+        </CardContent>
       </Card>
     </div>
   );
