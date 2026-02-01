@@ -1,9 +1,12 @@
 "use server";
 
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/client";
 import { hashSync } from "bcrypt-ts-edge";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
+import { ZodError } from "zod";
 import { signIn, signOut } from "@/auth";
 import { prisma } from "@/lib/prisma";
+import { formatError } from "@/lib/utils";
 import { signInFormSchema, signUpFormSchema } from "@/lib/validators";
 
 export async function signInWithCredentials(_: unknown, formData: FormData) {
@@ -66,13 +69,22 @@ export async function signUpUser(_: unknown, formData: FormData) {
       message: "User registered successfully",
     };
   } catch (error) {
-    if (isRedirectError(error)) {
+    let errorMessage = "User was not registered";
+
+    if (
+      error instanceof PrismaClientKnownRequestError &&
+      error.code === "P2002"
+    ) {
+      errorMessage = "Email already exists.";
+    } else if (error instanceof ZodError) {
+      errorMessage = formatError(error) ?? "";
+    } else if (isRedirectError(error)) {
       throw error;
     }
 
     return {
       success: false,
-      message: "User was not registered",
+      message: errorMessage,
     };
   }
 }
