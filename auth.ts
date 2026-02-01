@@ -50,16 +50,36 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     }),
   ],
   callbacks: {
-    async session({ session, user, trigger, token }) {
+    async session({ session, user, trigger, token }: any) {
       if (token.sub) {
         session.user.id = token.sub;
+        session.user.role = token.role;
+        session.user.name = token.name;
       }
+
+      console.log(session);
 
       if (trigger === "update") {
         session.user.name = user.name;
       }
 
       return session;
+    },
+    async jwt({ token, user }: any) {
+      if (user) {
+        token.role = user.role;
+
+        if (user.name === "NO_NAME") {
+          token.name = user.email?.split("@")[0];
+
+          await prisma.user.update({
+            where: { id: user.id },
+            data: { name: token.name },
+          });
+        }
+      }
+
+      return token;
     },
   },
 });
