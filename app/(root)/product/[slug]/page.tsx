@@ -3,7 +3,6 @@ import AddToCart from "@/components/shared/product/add-to-cart";
 import ProductImages from "@/components/shared/product/product-images";
 import ProductPrice from "@/components/shared/product/product-price";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -11,6 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { getMyCart } from "@/lib/actions/cart.actions";
 import { getProductBySlug } from "@/lib/actions/product.actions";
 
 export default async function ProductDetailsPage(props: {
@@ -21,6 +21,8 @@ export default async function ProductDetailsPage(props: {
   const product = await getProductBySlug(slug);
 
   if (!product) notFound();
+
+  const cart = await getMyCart();
 
   return (
     <section>
@@ -76,6 +78,7 @@ export default async function ProductDetailsPage(props: {
               {product.stock && (
                 <div className="flex-center">
                   <AddToCart
+                    cart={cart}
                     item={{
                       productId: product.id,
                       name: product.name,
