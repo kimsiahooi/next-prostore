@@ -1,5 +1,6 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { compareSync } from "bcrypt-ts-edge";
+import { NextResponse } from "next/server";
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { prisma } from "@/lib/prisma";
@@ -57,8 +58,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         session.user.name = token.name;
       }
 
-      console.log(session);
-
       if (trigger === "update") {
         session.user.name = user.name;
       }
@@ -80,6 +79,25 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       }
 
       return token;
+    },
+    authorized({ request }) {
+      if (!request.cookies.get("sessionCartId")) {
+        const sessionCartId = crypto.randomUUID();
+
+        const newRequestHeaders = new Headers(request.headers);
+
+        const response = NextResponse.next({
+          request: {
+            headers: newRequestHeaders,
+          },
+        });
+
+        response.cookies.set("sessionCartId", sessionCartId);
+
+        return response;
+      } else {
+        return true;
+      }
     },
   },
 });
