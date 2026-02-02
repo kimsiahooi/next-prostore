@@ -57,12 +57,41 @@ export async function addItemToCart(data: CartItem) {
       });
 
       revalidatePath(`/product/${product.slug}`);
-    }
 
-    return {
-      success: true,
-      message: "Item added to cart",
-    };
+      return {
+        success: true,
+        message: "Item added to cart",
+      };
+    } else {
+      const existItem = cart.items.find((x) => x.productId === item.productId);
+
+      if (existItem) {
+        if (product.stock < existItem.qty + 1) {
+          throw new Error("Not enough stock");
+        }
+
+        existItem.qty += 1;
+      } else {
+        if (product.stock < 1) throw new Error("Not enough stock");
+
+        cart.items.push(item);
+      }
+
+      await prisma.cart.update({
+        where: { id: cart.id },
+        data: {
+          items: cart.items,
+          ...calcPrice(cart.items),
+        },
+      });
+
+      revalidatePath(`/product/${product.slug}`);
+
+      return {
+        success: true,
+        message: `${product.name} ${existItem ? "updated in" : "added to"} cart`,
+      };
+    }
   } catch (error) {
     return {
       success: false,

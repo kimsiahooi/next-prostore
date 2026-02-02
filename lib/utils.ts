@@ -21,6 +21,8 @@ export function formatError(error: ZodError | unknown) {
     return Object.values(z.flattenError(error).fieldErrors).join(". ");
   }
 
+  if (error instanceof Error) return error.message;
+
   return JSON.stringify(error);
 }
 

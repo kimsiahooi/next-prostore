@@ -5,6 +5,12 @@ import type {
   insertProductSchema,
 } from "@/lib/validators";
 
+declare global {
+  namespace PrismaJson {
+    type CartItems = CartItem[];
+  }
+}
+
 export type Product = z.infer<typeof insertProductSchema> & {
   id: string;
   rating: string;

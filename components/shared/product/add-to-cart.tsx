@@ -18,7 +18,7 @@ export default function AddToCart({ item }: { item: CartItem }) {
       return;
     }
 
-    toast(`${item.name} added to cart`, {
+    toast(res.message, {
       action: (
         <Button size="xs" onClick={() => router.push("/cart")}>
           Go To Cart
