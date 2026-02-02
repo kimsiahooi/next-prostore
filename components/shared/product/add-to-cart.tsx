@@ -1,7 +1,8 @@
 "use client";
 
-import { Minus, Plus } from "lucide-react";
+import { Loader, Minus, Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useTransition } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
@@ -20,32 +21,38 @@ export default function AddToCart({
 }) {
   const router = useRouter();
 
-  const handleAddToCart = async () => {
-    const res = await addItemToCart(item);
+  const [isPending, startTransition] = useTransition();
 
-    if (!res.success) {
-      toast.error(res.message);
-      return;
-    }
+  const handleAddToCart = () => {
+    startTransition(async () => {
+      const res = await addItemToCart(item);
 
-    toast(res.message, {
-      action: (
-        <Button size="xs" onClick={() => router.push("/cart")}>
-          Go To Cart
-        </Button>
-      ),
+      if (!res.success) {
+        toast.error(res.message);
+        return;
+      }
+
+      toast(res.message, {
+        action: (
+          <Button size="xs" onClick={() => router.push("/cart")}>
+            Go To Cart
+          </Button>
+        ),
+      });
     });
   };
 
-  const handleRemoveFromCart = async () => {
-    const res = await removeItemFromCart(item.productId);
+  const handleRemoveFromCart = () => {
+    startTransition(async () => {
+      const res = await removeItemFromCart(item.productId);
 
-    if (!res.success) {
-      toast.error(res.message);
-      return;
-    }
+      if (!res.success) {
+        toast.error(res.message);
+        return;
+      }
 
-    toast(res.message);
+      toast(res.message);
+    });
   };
 
   const existItem = cart?.items.find((x) => x.productId === item.productId);
@@ -54,11 +61,19 @@ export default function AddToCart({
     return (
       <div>
         <Button variant="outline" type="button" onClick={handleRemoveFromCart}>
-          <Minus className="size-4" />
+          {isPending ? (
+            <Loader className="size-4 animate-spin" />
+          ) : (
+            <Minus className="size-4" />
+          )}
         </Button>
         <span className="px-2">{existItem.qty}</span>
         <Button variant="outline" type="button" onClick={handleAddToCart}>
-          <Plus className="size-4" />
+          {isPending ? (
+            <Loader className="size-4 animate-spin" />
+          ) : (
+            <Plus className="size-4" />
+          )}
         </Button>
       </div>
     );
@@ -66,7 +81,12 @@ export default function AddToCart({
 
   return (
     <Button className="w-full" type="button" onClick={handleAddToCart}>
-      <Plus /> Add To Cart
+      {isPending ? (
+        <Loader className="size-4 animate-spin" />
+      ) : (
+        <Plus className="size-4" />
+      )}{" "}
+      Add To Cart
     </Button>
   );
 }
