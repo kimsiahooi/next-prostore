@@ -23,3 +23,7 @@ export function formatError(error: ZodError | unknown) {
 
   return JSON.stringify(error);
 }
+
+export function round2(value: number | string) {
+  return Math.round(((Number(value) + Number.EPSILON) * 100) / 100);
+}
