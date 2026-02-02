@@ -19,6 +19,20 @@ const prisma = new PrismaClient({ adapter }).$extends({
         compute: (product) => product.rating.toString(),
       },
     },
+    cart: {
+      itemsPrice: {
+        compute: (cart) => cart.itemsPrice.toString(),
+      },
+      totalPrice: {
+        compute: (cart) => cart.totalPrice.toString(),
+      },
+      shippingPrice: {
+        compute: (cart) => cart.shippingPrice.toString(),
+      },
+      taxPrice: {
+        compute: (cart) => cart.taxPrice.toString(),
+      },
+    },
   },
 });
 

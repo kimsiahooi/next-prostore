@@ -16,8 +16,10 @@ export function formatNumberWithDecimal(num: number): string {
   return decimal ? `${int}.${decimal.padEnd(2, "0")}` : `${int}.00`;
 }
 
-export function formatError(error: ZodError) {
+export function formatError(error: ZodError | unknown) {
   if (error instanceof ZodError) {
     return Object.values(z.flattenError(error).fieldErrors).join(". ");
   }
+
+  return JSON.stringify(error);
 }

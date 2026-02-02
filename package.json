@@ -12,7 +12,7 @@
     "prisma:seed": "prisma db seed",
     "pm2:start": "PORT=3002 pm2 start bun --name \"prostore\" -- start",
     "pm2:stop": "pm2 stop all && pm2 delete all",
-    "production": "bun i && bun run prisma:generate && bun run build && bun run prisma:deploy && bun run pm2:stop && bun run pm2:start"
+    "prod": "bun i && bun run prisma:generate && bun run build && bun run prisma:deploy && bun run pm2:stop && bun run pm2:start"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.1",
