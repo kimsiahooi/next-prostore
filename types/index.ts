@@ -9,6 +9,8 @@ import type {
 declare global {
   namespace PrismaJson {
     type CartItems = CartItem[];
+
+    type UserAddress = ShippingAddress;
   }
 }
 

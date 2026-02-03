@@ -53,6 +53,7 @@ model User {
   image         String?
   password      String?
   role          String    @default("user")
+  /// [UserAddress]
   address       Json?
   paymentMethod String?
   createdAt     DateTime  @default(now())
