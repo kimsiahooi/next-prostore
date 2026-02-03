@@ -4,6 +4,7 @@ import { PrismaClientKnownRequestError } from "@prisma/client/runtime/client";
 import { hashSync } from "bcrypt-ts-edge";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
 import { ZodError } from "zod";
+import type { User } from "@/app/generated/prisma/client";
 import { signIn, signOut } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { formatError } from "@/lib/utils";
@@ -87,4 +88,14 @@ export async function signUpUser(_: unknown, formData: FormData) {
       message: errorMessage,
     };
   }
+}
+
+export async function getUserById(userId: User["id"]) {
+  const user = await prisma.user.findFirst({
+    where: { id: userId },
+  });
+
+  if (!user) throw new Error("User not found");
+
+  return user;
 }
