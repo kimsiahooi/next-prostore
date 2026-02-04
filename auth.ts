@@ -1,5 +1,6 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { compareSync } from "bcrypt-ts-edge";
+import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
@@ -64,8 +65,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
       return session;
     },
-    async jwt({ token, user }: any) {
+    async jwt({ token, user, trigger }: any) {
       if (user) {
+        token.id = user.id;
         token.role = user.role;
 
         if (user.name === "NO_NAME") {
@@ -75,6 +77,30 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             where: { id: user.id },
             data: { name: token.name },
           });
+        }
+
+        if (trigger === "signIn" || trigger === "signUp") {
+          const cookiesObject = await cookies();
+          const sessionCartId = cookiesObject.get("sessionCartId")?.value;
+
+          if (sessionCartId) {
+            const sessionCart = await prisma.cart.findFirst({
+              where: { sessionCartId },
+            });
+
+            if (sessionCart) {
+              await prisma.cart.deleteMany({
+                where: { userId: user.id },
+              });
+
+              await prisma.cart.update({
+                where: { id: sessionCart.id },
+                data: {
+                  userId: user.id,
+                },
+              });
+            }
+          }
         }
       }
 
