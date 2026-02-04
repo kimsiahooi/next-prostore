@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import ShippingAddressForm from "@/components/pages/shipping-address/shipping-address-form";
+import CheckoutSteps from "@/components/shared/checkout/checkout-steps";
 import { getMyCart } from "@/lib/actions/cart.actions";
 import { getUserById } from "@/lib/actions/user.actions";
 
@@ -22,5 +23,10 @@ export default async function ShippingAddressPage() {
 
   const user = await getUserById(userId);
 
-  return <ShippingAddressForm address={user.address} />;
+  return (
+    <>
+      <CheckoutSteps current={1} />
+      <ShippingAddressForm address={user.address} />
+    </>
+  );
 }
