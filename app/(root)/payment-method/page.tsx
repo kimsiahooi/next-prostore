@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { auth } from "@/auth";
 import PaymentMethodForm from "@/components/pages/payment-method/payment-method-form";
+import CheckoutSteps from "@/components/shared/checkout/checkout-steps";
 import { getUserById } from "@/lib/actions/user.actions";
 
 export const metadata: Metadata = {
@@ -15,5 +16,10 @@ export default async function PaymentMethodPage() {
 
   const user = await getUserById(userId);
 
-  return <PaymentMethodForm preferredPaymentMethod={user.paymentMethod} />;
+  return (
+    <>
+      <CheckoutSteps current={2} />
+      <PaymentMethodForm preferredPaymentMethod={user.paymentMethod} />
+    </>
+  );
 }
